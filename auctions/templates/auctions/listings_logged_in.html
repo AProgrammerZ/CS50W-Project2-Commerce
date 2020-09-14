@@ -1,0 +1,53 @@
+{% extends "auctions/listings.html" %}
+
+{% block winner %}
+    {% if request.user.username == listing.winner %}
+        <h2>You ({{request.user.username}}) won this auction.</h2>
+    {% endif %}
+{% endblock %}
+
+{% block watch %}
+    {% if listing.active == True %}
+        {% if listing in watchlist_listings %}
+            <a href="{% url 'unwatch' listing.id %}">
+                <h6>Remove from watchlist</h6>
+            </a>
+        {% else %}
+            <a href="{% url 'watch' listing.id %}">
+                <h6>Add to watchlist</h6>
+            </a>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block close %}
+    {% if can_close_listing == True and listing.active == True %}
+        <a href="{% url 'close' listing.id %}">
+            <h6>Close this auction (and make the highest bidder the winner)</h6>
+        </a>
+    {% endif %}
+{% endblock %}
+
+{% block bid %}
+    {% if listing.active == True %}
+        {% if message %}
+        <div>{{ message }}</div>
+        {% endif %}
+        
+        <form action="{% url 'listings' listing.id %}" method="post">
+            {% csrf_token %}
+            <input type="number" id="bid_price" name="bid_price" placeholder="Bid" step="0.01"><br>
+            <input class="btn btn-primary" type="submit" value="Place Bid" name="Bid">
+        </form>
+    {% endif %}
+{% endblock %}
+
+{% block add_comment %}
+    {% if listing.active == True %}
+        <form action="{% url 'listings' listing.id %}" method="post">
+            {% csrf_token %}
+            <input type="text" id="comment" name="comment" placeholder="Add a comment"><br>
+            <input class="btn btn-primary" type="submit" value="Add comment" name="Comment">
+        </form>
+    {% endif %}
+{% endblock %}

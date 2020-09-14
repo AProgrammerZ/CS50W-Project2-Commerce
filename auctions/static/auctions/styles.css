@@ -1,0 +1,13 @@
+body {
+    padding: 10px;
+}
+
+.unstyle {
+  color: black;
+  text-decoration: none;
+}
+
+.unstyle:hover {
+  color: blue;
+  text-decoration: none;
+}

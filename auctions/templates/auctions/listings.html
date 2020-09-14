@@ -1,0 +1,67 @@
+{% extends "auctions/layout.html" %}
+
+{% load static %}
+{% load humanize %}
+
+{% block extra_css %}
+    <link href="{% static 'auctions/listing.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    {% if listing.active == False %}
+        <h2>This listing has been closed.</h2>
+        {% block winner %}
+        {% endblock %}
+    {% endif %}    
+    
+    <h2>Listing: {{listing.title}}</h2>
+    
+    {% block watch %}
+    {% endblock %}
+
+    {% block close %}
+    {% endblock %}
+
+    {% if listing.photo %}
+        <img src="{{listing.photo}}" alt="uploaded picture">
+    {% else %}
+        <p>No image was uploaded for this listing.</p>
+    {% endif %}
+    <h6>{{listing.description}}</h6>
+    <h2>${{listing.price|intcomma}}</h2>
+
+    {% if listing.active %}
+        <p>{{amount_of_bids}} bid(s) so far.</p>
+        {% if current_bid %}
+            <p>Current bid: ${{current_bid.bid_price|intcomma}} (by {{current_bid.username}})</p>
+        {% endif %}
+    {% endif %}
+
+    {% block bid %}
+    {% endblock %}
+
+    <h3>Details:</h3>
+    <ul>
+        <li><h6>Category: {{listing.category}}</h6></li>
+        <li><h6>Listed by: {{listing.username}}</h6></li>
+        <li><h6>Listed on: {{listing.creation_date}}</h6></li>
+    </ul>
+    
+    <h3>Comments:</h3>
+    <ol>
+        {% if comments %}
+            {% for comment in comments %}
+            <li>
+                <strong>{{ comment.username }}:</strong>
+                {{ comment.text }} <br>
+                <small>{{ comment.date }}</small>
+            </li>
+            {% endfor %}
+        {% else %}
+            <p>No comments.</p>
+        {% endif %}
+    </ol>
+
+    {% block add_comment %}
+    {% endblock %}
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "auctions/layout.html" %}
+
+{% load static %}
+{% load humanize %}
+
+{% block extra_css %}
+    <link href="{% static 'auctions/index.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}    
+    <h2>Active Listings in {{category}} category</h2>
+    {% if active_listings_in_category %}
+        {% for listing in active_listings_in_category %}
+            <a class="unstyle" href="{% url 'listings' listing.id %}">
+                <div class="row">
+                    <div class="col">
+                        {% if listing.photo %}
+                        <img src="{{listing.photo}}" alt="uploaded picture">
+                        {% else %}
+                        <p>No image was uploaded for this listing.</p>
+                        {% endif %}
+                    </div>
+                    <div class="col">
+                        <h3>{{listing.title}}</h3>
+                        <h6><strong>Price: </strong>${{listing.price|intcomma}}</h6>
+                        <h6>{{listing.description}}</h6>
+                        <h6><strong>Category: </strong>{{listing.category}}</h6>
+                        <small>Created on {{listing.creation_date}}</small>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    {% else %}
+        <p>No active Listings in {{category}} category</p>
+    {% endif %}
+{% endblock %}
